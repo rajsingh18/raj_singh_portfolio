@@ -1,14 +1,31 @@
 import { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser"; // <-- ADDED
 import rajPhoto from "./raj_image.jpg";
 
-// === IMPORT YOUR CERTIFICATE IMAGES HERE ===
-// Replace these paths with your actual certificate images
-import csharpCertImage from "./csharp_certificate.jpeg";        // Foundational C# with Microsoft
-import blockchainCertImage from "./image.png"; // Blockchain & its Application
-import javaCertImage from "./java_certificate.jpg";             // Certificate of Excellence — Java Development
-import aiCertImage from "./ai.png";                 // AI for Future Workforce Program
-// ==========================================
+// Certificate images
+import csharpCertImage from "./csharp_certificate.jpeg";
+import blockchainCertImage from "./image.png";
+import javaCertImage from "./java_certificate.jpg";
+import aiCertImage from "./ai.png";
 
+// Tech icons (react-icons)
+import { FaJava, FaPython, FaGitAlt, FaPhp } from "react-icons/fa";
+import {
+  SiReact,
+  SiNodedotjs,
+  SiExpress,
+  SiJavascript,
+  SiHtml5,
+  SiCss3,
+  SiMysql,
+  SiMongodb,
+  SiPostgresql,
+  SiSelenium,
+} from "react-icons/si";
+import { TbStack2 } from "react-icons/tb";
+import { VscTerminalBash } from "react-icons/vsc";
+
+// ========== STYLES (unchanged) ==========
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@400;700;800&display=swap');
 
@@ -35,7 +52,6 @@ const styles = `
 
   .rbs-content { position: relative; z-index: 1; }
 
-  /* NAV */
   .rbs-nav {
     display: flex;
     justify-content: space-between;
@@ -81,7 +97,6 @@ const styles = `
 
   .rbs-nav-links a:hover { color: #63f0b4; }
 
-  /* HERO */
   .rbs-hero {
     padding: 7rem 3rem 5rem;
     max-width: 1000px;
@@ -175,7 +190,6 @@ const styles = `
 
   .rbs-btn.rbs-fill:hover { background: #4ed49e; }
 
-  /* SECTIONS */
   .rbs-section {
     max-width: 1000px;
     margin: 0 auto;
@@ -201,14 +215,16 @@ const styles = `
     background: linear-gradient(90deg, rgba(99,240,180,0.2), transparent);
   }
 
-  /* SKILLS */
   .rbs-skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
   }
 
   .rbs-skill-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     border: 1px solid rgba(99,240,180,0.15);
     padding: 0.6rem 1rem;
     font-size: 12px;
@@ -216,7 +232,6 @@ const styles = `
     color: rgba(232,230,224,0.7);
     border-radius: 2px;
     transition: all 0.2s;
-    text-align: center;
     font-family: 'DM Mono', monospace;
   }
 
@@ -226,7 +241,11 @@ const styles = `
     background: rgba(99,240,180,0.04);
   }
 
-  /* EXPERIENCE */
+  .rbs-skill-icon {
+    font-size: 18px;
+    color: #63f0b4;
+  }
+
   .rbs-exp-card {
     border: 1px solid rgba(99,240,180,0.12);
     padding: 2rem;
@@ -289,10 +308,9 @@ const styles = `
     font-size: 10px;
   }
 
-  /* PROJECTS */
   .rbs-projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
   }
 
@@ -321,6 +339,16 @@ const styles = `
 
   .rbs-project-card:hover { border-color: rgba(99,240,180,0.3); }
   .rbs-project-card:hover::before { height: 100%; }
+
+  .rbs-project-thumb {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(99,240,180,0.2);
+    background: #111;
+  }
 
   .rbs-project-num {
     font-size: 10px;
@@ -389,7 +417,6 @@ const styles = `
     border-color: rgba(99,240,180,0.4);
   }
 
-  /* CERTS */
   .rbs-cert-list { display: flex; flex-direction: column; gap: 10px; }
 
   .rbs-cert-item {
@@ -435,7 +462,6 @@ const styles = `
     margin-top: 2px;
   }
 
-  /* MODAL */
   .rbs-modal-overlay {
     position: fixed;
     top: 0;
@@ -509,7 +535,6 @@ const styles = `
     flex-wrap: wrap;
   }
 
-  /* EDUCATION */
   .rbs-edu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -558,7 +583,56 @@ const styles = `
     color: rgba(99,240,180,0.55);
   }
 
-  /* FOOTER */
+  .rbs-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 600px;
+    margin-top: 1rem;
+  }
+
+  .rbs-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .rbs-form-group label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(99,240,180,0.6);
+  }
+
+  .rbs-form-group input,
+  .rbs-form-group textarea {
+    background: rgba(10,10,15,0.8);
+    border: 1px solid rgba(99,240,180,0.2);
+    padding: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #e8e6e0;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .rbs-form-group input:focus,
+  .rbs-form-group textarea:focus {
+    outline: none;
+    border-color: #63f0b4;
+  }
+
+  .rbs-form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .rbs-form-success {
+    font-size: 12px;
+    color: #63f0b4;
+    margin-top: 0.5rem;
+  }
+
   .rbs-footer {
     text-align: center;
     padding: 3rem;
@@ -570,7 +644,6 @@ const styles = `
 
   .rbs-footer span { color: rgba(99,240,180,0.4); }
 
-  /* PHOTO */
   .rbs-hero-inner {
     display: flex;
     align-items: center;
@@ -617,25 +690,16 @@ const styles = `
     inset: 5px;
     border-radius: 50%;
     object-fit: cover;
-    object-position: 0% 0%;
+    object-position: 50% 15%;
     width: calc(100% - 10px);
     height: calc(100% - 10px);
     z-index: 2;
     filter: grayscale(15%);
   }
 
-  /* RESPONSIVE BREAKPOINTS */
-  /* Tablet and below */
   @media (max-width: 768px) {
-    .rbs-nav {
-      padding: 1rem 1.5rem;
-      flex-direction: column;
-      text-align: center;
-    }
-    .rbs-nav-links {
-      gap: 1rem;
-      justify-content: center;
-    }
+    .rbs-nav { padding: 1rem 1.5rem; flex-direction: column; text-align: center; }
+    .rbs-nav-links { gap: 1rem; justify-content: center; }
     .rbs-nav-links a { font-size: 10px; }
     .rbs-hero { padding: 4rem 1.5rem 3rem; }
     .rbs-section { padding: 3rem 1.5rem; }
@@ -645,9 +709,9 @@ const styles = `
     .rbs-photo-wrap { width: 140px; height: 140px; margin-bottom: 1rem; }
     .rbs-projects-grid { grid-template-columns: 1fr; }
     .rbs-edu-grid { grid-template-columns: 1fr; }
+    .rbs-skills-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   }
 
-  /* Mobile landscape */
   @media (max-width: 640px) {
     .rbs-nav-links { gap: 0.8rem; }
     .rbs-nav-links a { font-size: 9px; }
@@ -665,7 +729,6 @@ const styles = `
     .rbs-modal-buttons button { padding: 0.4rem 0.8rem; font-size: 9px; }
   }
 
-  /* Small phones */
   @media (max-width: 480px) {
     .rbs-nav { padding: 0.75rem 1rem; }
     .rbs-hero { padding: 2rem 1rem; }
@@ -679,11 +742,24 @@ const styles = `
   }
 `;
 
-const skills = [
-  "Core Java", "React.js", "Node.js", "Express.js", "Python",
-  "HTML / CSS", "JavaScript", "MySQL", "MongoDB", "PostgreSQL",
-  "Git / GitHub", "Java Selenium", "REST APIs", "MERN Stack",
-  "AutomationEdge", "OLLAMA / AI", "PHP", "Agile / SDLC",
+// ========== DATA ==========
+const skillsWithIcons = [
+  { name: "Core Java", icon: <FaJava /> },
+  { name: "React.js", icon: <SiReact /> },
+  { name: "Node.js", icon: <SiNodedotjs /> },
+  { name: "Express.js", icon: <SiExpress /> },
+  { name: "Python", icon: <FaPython /> },
+  { name: "HTML / CSS", icon: <SiHtml5 /> },
+  { name: "JavaScript", icon: <SiJavascript /> },
+  { name: "MySQL", icon: <SiMysql /> },
+  { name: "MongoDB", icon: <SiMongodb /> },
+  { name: "PostgreSQL", icon: <SiPostgresql /> },
+  { name: "Git / GitHub", icon: <FaGitAlt /> },
+  { name: "Java Selenium", icon: <SiSelenium /> },
+  { name: "REST APIs", icon: <VscTerminalBash /> },
+  { name: "MERN Stack", icon: <TbStack2 /> },
+  { name: "PHP", icon: <FaPhp /> },
+  { name: "Agile / SDLC", icon: <VscTerminalBash /> },
 ];
 
 const experience = {
@@ -709,7 +785,8 @@ const projects = [
     desc: "A full-featured e-commerce platform built on the MERN stack. The React.js frontend handles dynamic product listings, cart state, and a responsive UI. The Node.js + Express.js backend exposes RESTful APIs for authentication (JWT), product CRUD, order management, and payment processing. MongoDB stores product, user, and order data. A separate admin panel enables inventory and order management.",
     tags: ["React.js", "Node.js", "Express.js", "MongoDB", "JWT Auth", "REST API"],
     github: "https://github.com/rajsingh18/QUICKPICK1",
-    live: null,
+    live: "https://quick-pick-h7ap.vercel.app/",
+    image: "/quickpick.png",
   },
   {
     num: "// 02",
@@ -719,10 +796,10 @@ const projects = [
     tags: ["HTML", "CSS", "JavaScript", "PHP", "Netlify"],
     github: "https://github.com/rajsingh18/eathub",
     live: "https://grand-unicorn-6563c9.netlify.app/",
+    image: "/eathub-preview.png",
   },
 ];
 
-// Certifications array now includes image imports for all entries
 const certifications = [
   { icon: "C#", name: "Foundational C# with Microsoft", org: "freeCodeCamp", image: csharpCertImage },
   { icon: "BC", name: "Blockchain & its Application", org: "NPTEL (SWAYAM) — 2025", image: blockchainCertImage },
@@ -738,10 +815,12 @@ const education = [
 ];
 
 const navItems = [
+  { label: "About", id: "about" },
   { label: "Skills", id: "skills" },
   { label: "Exp", id: "exp" },
   { label: "Projects", id: "projects" },
   { label: "Certs", id: "certs" },
+  { label: "Contact", id: "contact" },
   { label: "Education", id: "edu" },
 ];
 
@@ -749,10 +828,14 @@ function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
+// ========== MAIN COMPONENT ==========
 export default function RajSinghPortfolio() {
   const styleRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formSent, setFormSent] = useState(false);
+  const [isSending, setIsSending] = useState(false); // NEW
 
   useEffect(() => {
     if (!document.getElementById("rbs-portfolio-styles")) {
@@ -827,12 +910,54 @@ export default function RajSinghPortfolio() {
     URL.revokeObjectURL(url);
   };
 
+  const handleDownloadResume = () => {
+    const link = document.createElement("a");
+    link.href = "/resume.pdf";
+    link.download = "Raj_Singh_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // UPDATED: Send email using EmailJS
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setIsSending(true);
+
+    // 🔁 REPLACE THESE WITH YOUR ACTUAL EMAILJS CREDENTIALS
+    const SERVICE_ID = "service_ajgncyb";
+    const TEMPLATE_ID = "template_rnvhsyg";
+    const PUBLIC_KEY = "HCs-JOblTrA_coczH";
+
+    const now = new Date();
+    const formattedTime = now.toLocaleString();
+
+    const templateParams = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      time: formattedTime,
+    };
+
+    try {
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+      setFormSent(true);
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setFormSent(false), 5000);
+    } catch (error) {
+      console.error("Email sending failed:", error);
+      alert("Oops! Something went wrong. Please try again later.");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <div className="rbs-portfolio">
       <div className="rbs-grid-bg" />
       <div className="rbs-content">
 
-        {/* NAV */}
+        {/* NAVIGATION */}
         <nav className="rbs-nav">
           <div className="rbs-nav-logo">RBS/</div>
           <div className="rbs-nav-links">
@@ -886,25 +1011,45 @@ export default function RajSinghPortfolio() {
                 >
                   GitHub ↗
                 </a>
+                <button className="rbs-btn" onClick={handleDownloadResume}>
+                  Resume PDF ↗
+                </button>
               </div>
             </div>
             <div className="rbs-photo-wrap">
-              <img
-                className="rbs-photo"
-                src={rajPhoto}
-                alt="Raj Brijesh Singh"
-              />
+              <img className="rbs-photo" src={rajPhoto} alt="Raj Brijesh Singh" />
             </div>
           </div>
         </div>
+
+        {/* ABOUT ME */}
+        <section id="about" className="rbs-section">
+          <div className="rbs-section-label">About me</div>
+          <div style={{ maxWidth: "800px", fontSize: "14px", lineHeight: "1.8", color: "rgba(232,230,224,0.7)" }}>
+            <p>
+              I'm a passionate Full-Stack Developer and MCA student at the University of Mumbai,
+              driven by a love for building clean, efficient, and user‑centric digital experiences.
+              My journey began with a curiosity for how things work under the hood — now I craft
+              scalable web apps using the MERN stack, experiment with AI automation, and constantly
+              explore new technologies.
+            </p>
+            <p style={{ marginTop: "1rem" }}>
+              I'm actively seeking <strong>Full‑Stack Developer / Software Engineer</strong> roles
+              where I can contribute to impactful projects, collaborate with agile teams, and
+              continue growing as an engineer. When I'm not coding, you'll find me contributing to
+              open source or learning about blockchain and AI.
+            </p>
+          </div>
+        </section>
 
         {/* SKILLS */}
         <section id="skills" className="rbs-section">
           <div className="rbs-section-label">Technical skills</div>
           <div className="rbs-skills-grid">
-            {skills.map((skill) => (
-              <div key={skill} className="rbs-skill-pill">
-                {skill}
+            {skillsWithIcons.map((skill) => (
+              <div key={skill.name} className="rbs-skill-pill">
+                <span className="rbs-skill-icon">{skill.icon}</span>
+                {skill.name}
               </div>
             ))}
           </div>
@@ -935,6 +1080,9 @@ export default function RajSinghPortfolio() {
           <div className="rbs-projects-grid">
             {projects.map((proj) => (
               <div key={proj.name} className="rbs-project-card">
+                {proj.image && (
+                  <img src={proj.image} alt={`${proj.name} preview`} className="rbs-project-thumb" />
+                )}
                 <div className="rbs-project-num">{proj.num}</div>
                 <div className="rbs-project-name">{proj.name}</div>
                 <div className="rbs-project-arch">{proj.arch}</div>
@@ -945,21 +1093,11 @@ export default function RajSinghPortfolio() {
                   ))}
                 </div>
                 <div className="rbs-project-links">
-                  <a
-                    className="rbs-project-link"
-                    href={proj.github}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a className="rbs-project-link" href={proj.github} target="_blank" rel="noreferrer">
                     GitHub ↗
                   </a>
                   {proj.live && (
-                    <a
-                      className="rbs-project-link"
-                      href={proj.live}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <a className="rbs-project-link" href={proj.live} target="_blank" rel="noreferrer">
                       Live Demo ↗
                     </a>
                   )}
@@ -985,6 +1123,43 @@ export default function RajSinghPortfolio() {
           </div>
         </section>
 
+        {/* CONTACT FORM */}
+        <section id="contact" className="rbs-section">
+          <div className="rbs-section-label">Contact me</div>
+          <form className="rbs-contact-form" onSubmit={handleContactSubmit}>
+            <div className="rbs-form-group">
+              <label>Your name</label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+            <div className="rbs-form-group">
+              <label>Email address</label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+            <div className="rbs-form-group">
+              <label>Message</label>
+              <textarea
+                required
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              />
+            </div>
+            <button type="submit" className="rbs-btn rbs-fill" style={{ width: "fit-content" }} disabled={isSending}>
+              {isSending ? "Sending..." : "Send message"}
+            </button>
+            {formSent && <div className="rbs-form-success">✓ Message sent successfully!</div>}
+          </form>
+        </section>
+
         {/* EDUCATION */}
         <section id="edu" className="rbs-section">
           <div className="rbs-section-label">Education</div>
@@ -1006,7 +1181,6 @@ export default function RajSinghPortfolio() {
         <footer className="rbs-footer">
           © 2026 &nbsp;·&nbsp; <span>Raj Brijesh Singh</span> &nbsp;·&nbsp; Mumbai, India
         </footer>
-
       </div>
 
       {/* MODAL */}
