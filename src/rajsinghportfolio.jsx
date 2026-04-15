@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import emailjs from "@emailjs/browser"; // <-- ADDED
+import emailjs from "@emailjs/browser";
 import rajPhoto from "./raj_image.jpg";
 
 // Certificate images
@@ -7,6 +7,7 @@ import csharpCertImage from "./csharp_certificate.jpeg";
 import blockchainCertImage from "./image.png";
 import javaCertImage from "./java_certificate.jpg";
 import aiCertImage from "./ai.png";
+import automationEdgeCert from "./Certificate_Raj_Singh_Automation_Edge_Foundation.png"; // PDF for experience section
 
 // Tech icons (react-icons)
 import { FaJava, FaPython, FaGitAlt, FaPhp } from "react-icons/fa";
@@ -16,7 +17,7 @@ import {
   SiExpress,
   SiJavascript,
   SiHtml5,
-  SiCss3,
+  //SiCss3,
   SiMysql,
   SiMongodb,
   SiPostgresql,
@@ -805,6 +806,7 @@ const certifications = [
   { icon: "BC", name: "Blockchain & its Application", org: "NPTEL (SWAYAM) — 2025", image: blockchainCertImage },
   { icon: "JV", name: "Certificate of Excellence — Java Development", org: "QUASTECH — May–Oct 2024", image: javaCertImage },
   { icon: "AI", name: "AI for Future Workforce Program", org: "Intel & DELL Technologies", image: aiCertImage },
+  // Automation Edge certificate removed from here - now in Experience section
 ];
 
 const education = [
@@ -835,7 +837,7 @@ export default function RajSinghPortfolio() {
   const [selectedCert, setSelectedCert] = useState(null);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formSent, setFormSent] = useState(false);
-  const [isSending, setIsSending] = useState(false); // NEW
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     if (!document.getElementById("rbs-portfolio-styles")) {
@@ -910,21 +912,15 @@ export default function RajSinghPortfolio() {
     URL.revokeObjectURL(url);
   };
 
+  // ========== UPDATED: Resume PDF now opens in a new tab ==========
   const handleDownloadResume = () => {
-    const link = document.createElement("a");
-    link.href = "/resume.pdf";
-    link.download = "Raj_Singh_Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open("/RAJ_BRIJESH_SINGH_RESUME.pdf", "_blank");
   };
 
-  // UPDATED: Send email using EmailJS
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
 
-    // 🔁 REPLACE THESE WITH YOUR ACTUAL EMAILJS CREDENTIALS
     const SERVICE_ID = "service_ajgncyb";
     const TEMPLATE_ID = "template_rnvhsyg";
     const PUBLIC_KEY = "HCs-JOblTrA_coczH";
@@ -962,9 +958,13 @@ export default function RajSinghPortfolio() {
           <div className="rbs-nav-logo">RBS/</div>
           <div className="rbs-nav-links">
             {navItems.map((item) => (
-              <a key={item.id} onClick={() => scrollToSection(item.id)}>
+             <button 
+             key={item.id} 
+              onClick={() => scrollToSection(item.id)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', color: 'inherit' }}
+              >
                 {item.label}
-              </a>
+                </button>
             ))}
           </div>
         </nav>
@@ -1071,6 +1071,16 @@ export default function RajSinghPortfolio() {
                 <li key={i}>{point}</li>
               ))}
             </ul>
+            {/* Certificate button added inside experience card */}
+            <div style={{ marginTop: "1.5rem" }}>
+              <button
+                className="rbs-btn"
+                onClick={() => window.open(automationEdgeCert, '_blank')}
+                style={{ fontSize: "10px", padding: "0.4rem 1rem" }}
+              >
+                📜 View Automation Edge Foundation Certificate ↗
+              </button>
+            </div>
           </div>
         </section>
 
