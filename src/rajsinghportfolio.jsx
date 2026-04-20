@@ -914,7 +914,7 @@ export default function RajSinghPortfolio() {
 
   // ========== UPDATED: Resume PDF now opens in a new tab ==========
  const handleDownloadResume = () => {
-  window.open(process.env.PUBLIC_URL + "/RAJ_BRIJESH_SINGH_Resume.pdf", "_blank");
+  window.open(process.env.PUBLIC_URL + "/RAJ_BRIJESH_SINGH_Resume_2026.pdf", "_blank");
 };
 
   const handleContactSubmit = async (e) => {
