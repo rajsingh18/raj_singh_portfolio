@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Raj Singh Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive portfolio website showcasing my work as a Full-Stack Developer. Built with React, featuring a dark theme, interactive components, and integrated contact form using EmailJS.
 
-## Available Scripts
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+- **Responsive Design** – Fully responsive layout that works on desktop, tablet, and mobile devices
+- **Smooth Navigation** – Sticky header with smooth scrolling to different sections
+- **Project Showcase** – Display of my key projects (QuickPick & EatHub) with live demo and GitHub links
+- **Certificate Viewer** – Clickable certificates that open in an elegant modal with download options (PDF/Word)
+- **Work Experience** – Detailed experience section with Automation Edge Foundation certificate link
+- **Contact Form** – Working contact form powered by EmailJS (sends messages directly to my inbox)
+- **Resume Download** – One-click PDF download of my resume
+- **Modern UI** – Dark theme with neon accents, grid background, and smooth animations
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React** – Frontend framework
+- **EmailJS** – Email integration for contact form
+- **React Icons** – Icon library for tech stack and social links
+- **CSS3** – Custom styling with responsive design
+- **Vercel / Netlify** – Deployment platforms
 
-### `npm test`
+## 📁 Project Structure
+portfolio/
+├── public/
+│ ├── resume.pdf # Resume file for download
+│ ├── quickpick.png # QuickPick project screenshot
+│ └── eathub-preview.png # EatHub project screenshot
+├── src/
+│ ├── assets/
+│ │ ├── raj_image.jpg # Profile photo
+│ │ ├── csharp_certificate.jpeg
+│ │ ├── image.png # Blockchain certificate
+│ │ ├── java_certificate.jpg
+│ │ ├── ai.png
+│ │ └── Certificate_Raj_Singh_Automation_Edge_Foundation.pdf
+│ └── rajsinghportfolio.jsx # Main component
+└── package.json
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## 🚀 Installation & Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js (v14 or higher)
+- npm or yarn
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Steps
 
-### `npm run eject`
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rajsingh18/portfolio.git
+   cd portfolio
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Install dependencies
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Install required packages
+npm install react-icons @emailjs/browser
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<img width="1908" height="1000" alt="image" src="https://github.com/user-attachments/assets/3a972f65-387c-40f8-8e76-5adb24b219ca" />
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
